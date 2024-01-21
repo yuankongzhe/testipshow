@@ -2,10 +2,19 @@ import Head from "next/head";
 import Image from "next/image";
 import { Inter } from "next/font/google";
 import styles from "@/styles/Home.module.css";
-
+import { useState } from 'react';
 const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {
+  const [ip, setIp] = useState('');
+
+  const fetchIP = async () => {
+    const response = await fetch('/api/get-ip', {
+      method: 'POST',
+    });
+    const data = await response.json();
+    setIp(data.ip);
+  };
   return (
     <>
       <Head>
@@ -107,7 +116,11 @@ export default function Home() {
               with&nbsp;Vercel.
             </p>
           </a>
-        </div>
+        </div>    
+        <div>
+        <button onClick={fetchIP}>Get my IP</button>
+        {ip && <p>Your IP is: {ip}</p>}
+      </div>
       </main>
     </>
   );
